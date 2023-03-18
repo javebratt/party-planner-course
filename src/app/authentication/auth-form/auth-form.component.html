@@ -1,0 +1,29 @@
+<form [formGroup]="authForm">
+  <ion-item>
+    <ion-label position="stacked">Email</ion-label>
+    <ion-input
+      formControlName="email"
+      type="email"
+      placeholder="Your email address"
+    >
+    </ion-input>
+  </ion-item>
+
+  <ion-item *ngIf="!isPasswordResetPage">
+    <ion-label position="stacked">Password</ion-label>
+    <ion-input
+      formControlName="password"
+      type="password"
+      placeholder="Your password"
+    >
+    </ion-input>
+  </ion-item>
+
+  <ion-button
+    (click)="submitCredentials(authForm)"
+    expand="block"
+    [disabled]="!authForm.valid"
+  >
+    {{ actionButtonText }}
+  </ion-button>
+</form>
