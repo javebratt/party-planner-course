@@ -1,4 +1,8 @@
-ion-item,
+ion-input,
 ion-datetime {
   margin: 16px auto;
+}
+
+ion-input {
+  border-bottom: 1px solid #ccc;
 }
