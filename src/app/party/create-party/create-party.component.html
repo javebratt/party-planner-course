@@ -37,7 +37,7 @@
   />
 
   <ion-button
-    [disabled]="!isValidForm()"
+    [disabled]="!(name && ticketPrice && cost && date)"
     expand="block"
     (click)="createEvent({name, date, ticketPrice, cost})"
   >

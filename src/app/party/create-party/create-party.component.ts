@@ -9,10 +9,10 @@ import { PartyService } from '../party.service';
   styleUrls: ['./create-party.component.scss'],
 })
 export class CreatePartyComponent {
-  name!: string;
-  ticketPrice!: number;
-  cost!: number;
-  date: any;
+  name: string | undefined;
+  ticketPrice: number | undefined;
+  cost: number | undefined;
+  date: number | undefined;
 
   constructor(
     private readonly router: Router,
@@ -24,9 +24,5 @@ export class CreatePartyComponent {
     await this.partyService.createParty(party);
     console.log(party);
     await this.router.navigateByUrl('party');
-  }
-
-  isValidForm(): boolean {
-    return this.name && this.ticketPrice && this.cost && this.date;
   }
 }
