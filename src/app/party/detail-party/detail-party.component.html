@@ -40,12 +40,14 @@
     </ion-button>
 
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button
-        color="danger"
-        (click)="removePartyAlert(currentParty.id)"
-      >
+      <ion-fab-button id="present-delete-alert" color="danger">
         <ion-icon name="remove"></ion-icon>
       </ion-fab-button>
     </ion-fab>
+    <ion-alert
+      trigger="present-delete-alert"
+      message="Are you sure you want to delete this document?"
+      [buttons]="alertButtons"
+    ></ion-alert>
   </ion-content>
 </ng-container>

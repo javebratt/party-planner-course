@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
 import { Observable, switchMap } from 'rxjs';
 import { Party } from '../party.model';
 import { PartyService } from '../party.service';
@@ -11,18 +10,26 @@ import { PartyService } from '../party.service';
   styleUrls: ['./detail-party.component.scss'],
 })
 export class DetailPartyComponent {
-  // We're creating a class variable for the currentParty
+  private partyId?: string;
+
   currentParty$: Observable<Party> = this.route.params.pipe(
-    switchMap((params: { [key: string]: string }) =>
-      this.partyService.getPartyDetail(params['partyId'])
-    )
+    switchMap((params: { [key: string]: string }) => {
+      this.partyId = params['partyId'];
+      return this.partyService.getPartyDetail(params['partyId']);
+    })
   );
-  // We're injecting Angular's ActivatedRoute into the constructor.
+  alertButtons = [
+    { text: 'Cancel', role: 'cancel' },
+    {
+      text: 'Delete Party',
+      role: 'confirm',
+      handler: () => this.removeParty(),
+    },
+  ];
   constructor(
-    private readonly route: ActivatedRoute,
     private readonly partyService: PartyService,
     private readonly router: Router,
-    private readonly alertCtrl: AlertController
+    private readonly route: ActivatedRoute
   ) {}
 
   async addTicketOperation(type: string, currentParty: Party) {
@@ -37,28 +44,16 @@ export class DetailPartyComponent {
     }
   }
 
-  async removeParty(partyId: string) {
+  async removeParty() {
+    if (!this.partyId) {
+      return;
+    }
+
     try {
-      await this.partyService.deleteParty(partyId);
+      await this.partyService.deleteParty(this.partyId);
       this.router.navigateByUrl('party');
     } catch (error) {
       console.log(error);
     }
-  }
-
-  async removePartyAlert(partyId: string) {
-    const alert = await this.alertCtrl.create({
-      message: `Are you sure you want to delete this document?`,
-      buttons: [
-        { text: 'Cancel', role: 'cancel' },
-        {
-          text: 'Delete Party',
-          handler: () => this.removeParty(partyId),
-        },
-      ],
-    });
-    await alert.present();
-
-    await alert.onDidDismiss();
   }
 }
