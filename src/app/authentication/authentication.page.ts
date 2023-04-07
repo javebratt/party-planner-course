@@ -1,28 +1,40 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
+import { AuthFormComponent } from './auth-form/auth-form.component';
 import { AuthenticationService } from './authentication.service';
 
 @Component({
   selector: 'app-authentication',
   templateUrl: './authentication.page.html',
   styleUrls: ['./authentication.page.scss'],
+  standalone: true,
+  imports: [
+    IonicModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AuthFormComponent,
+    CommonModule,
+    RouterModule,
+  ],
 })
 export class AuthenticationPage implements OnInit {
+  private readonly router = inject(Router);
+  private readonly auth = inject(AuthenticationService);
+
   readonly url: string = this.router.url.substr(1);
   pageTitle = 'Sign In';
   actionButtonText = 'Sign In';
-  constructor(
-    private readonly router: Router,
-    private readonly auth: AuthenticationService
-  ) {}
 
   ngOnInit() {
-    if (this.url === 'signup') {
+    if (this.url === 'auth/signup') {
       this.pageTitle = 'Create your Account';
       this.actionButtonText = 'Create Account';
     }
 
-    if (this.url === 'reset') {
+    if (this.url === 'auth/reset') {
       this.pageTitle = 'Reset your Password';
       this.actionButtonText = 'Reset Password';
     }
@@ -33,13 +45,13 @@ export class AuthenticationPage implements OnInit {
     // And depending on the URL, it calls the respective method.
     const { email, password } = userCredentials;
     switch (this.url) {
-      case 'login':
+      case 'auth/login':
         this.login(email, password);
         break;
-      case 'signup':
+      case 'auth/signup':
         this.signup(email, password);
         break;
-      case 'reset':
+      case 'auth/reset':
         this.resetPassword(email);
         break;
     }

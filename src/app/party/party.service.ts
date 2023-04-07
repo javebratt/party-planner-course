@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { User } from '@angular/fire/auth';
 import {
   addDoc,
@@ -20,10 +20,8 @@ import { Party } from './party.model';
   providedIn: 'root',
 })
 export class PartyService {
-  constructor(
-    private readonly auth: AuthenticationService,
-    private readonly firestore: Firestore
-  ) {}
+  private readonly auth = inject(AuthenticationService);
+  private readonly firestore = inject(Firestore);
 
   createParty(party: Partial<Party>) {
     const userId: string = this.auth.getUser()?.uid ?? '';

@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
 import { Observable, switchMap } from 'rxjs';
 import { Party } from '../party.model';
 import { PartyService } from '../party.service';
@@ -8,8 +10,14 @@ import { PartyService } from '../party.service';
   selector: 'app-detail-party',
   templateUrl: './detail-party.component.html',
   styleUrls: ['./detail-party.component.scss'],
+  standalone: true,
+  imports: [IonicModule, CommonModule],
 })
 export class DetailPartyComponent {
+  private readonly partyService = inject(PartyService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+
   private partyId?: string;
 
   currentParty$: Observable<Party> = this.route.params.pipe(
@@ -26,11 +34,6 @@ export class DetailPartyComponent {
       handler: () => this.removeParty(),
     },
   ];
-  constructor(
-    private readonly partyService: PartyService,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute
-  ) {}
 
   async addTicketOperation(type: string, currentParty: Party) {
     try {

@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
 import { Party } from '../party.model';
 import { PartyService } from '../party.service';
 
@@ -7,17 +9,17 @@ import { PartyService } from '../party.service';
   selector: 'app-create-party',
   templateUrl: './create-party.component.html',
   styleUrls: ['./create-party.component.scss'],
+  standalone: true,
+  imports: [IonicModule, FormsModule],
 })
 export class CreatePartyComponent {
+  private readonly partyService = inject(PartyService);
+  private readonly router = inject(Router);
+
   name: string | undefined;
   ticketPrice: number | undefined;
   cost: number | undefined;
   date: number | undefined;
-
-  constructor(
-    private readonly router: Router,
-    private readonly partyService: PartyService
-  ) {}
 
   async createEvent(party: Partial<Party>) {
     party.revenue = 0;

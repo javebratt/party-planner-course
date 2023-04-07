@@ -1,12 +1,23 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-auth-form',
   templateUrl: './auth-form.component.html',
   styleUrls: ['./auth-form.component.scss'],
+  standalone: true,
+  imports: [IonicModule, ReactiveFormsModule, CommonModule],
 })
 export class AuthFormComponent {
+  private readonly formBuilder = inject(FormBuilder);
+
   @Input() actionButtonText = 'Sign In';
   @Input() isPasswordResetPage = false;
   @Output() formSubmitted = new EventEmitter<any>();
@@ -20,8 +31,6 @@ export class AuthFormComponent {
       ]),
     ],
   });
-
-  constructor(private readonly formBuilder: FormBuilder) {}
 
   submitCredentials(authForm: FormGroup): void {
     if (!authForm.valid) {

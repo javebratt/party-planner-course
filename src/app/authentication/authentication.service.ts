@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   Auth,
   createUserWithEmailAndPassword,
@@ -14,7 +14,7 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthenticationService {
-  constructor(private readonly auth: Auth) {}
+  private readonly auth = inject(Auth);
 
   getUser(): User | null {
     return this.auth.currentUser;
@@ -25,6 +25,7 @@ export class AuthenticationService {
   }
 
   login(email: string, password: string): Promise<UserCredential> {
+    console.log('login', email, password);
     return signInWithEmailAndPassword(this.auth, email, password);
   }
 
